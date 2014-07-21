@@ -3,9 +3,9 @@ package ceu.marten.services;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import plux.android.bioplux.BPException;
-import plux.android.bioplux.Device;
-import plux.android.bioplux.Device.Frame;
+import com.bitalino.comm.BITalinoFrame;
+import com.bitalino.deviceandroid.BitalinoAndroidDevice;
+
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -57,6 +57,7 @@ public class BiopluxService extends Service {
 
 	// Get 80 frames every 50 miliseconds
 	private int numberOfFrames;
+	
 	public static final int TIMER_TIME =50;// cambiar
 
 	// Used to synchronize timer and main thread
@@ -67,8 +68,7 @@ public class BiopluxService extends Service {
 	private WakeLock wakeLock = null;
 
 	private DeviceConfiguration configuration;
-	private Device connection;
-	private Device.Frame[] frames;
+	private BitalinoAndroidDevice connection;	
 
 	private Timer timer = null;
 	private DataManager dataManager;
@@ -142,8 +142,9 @@ public class BiopluxService extends Service {
 	 */
 	@Override
 	public IBinder onBind(Intent intent) {	
-		Log.i(TAG, "onBind");
+		Log.i(TAG, "onBind");		
 		return mMessenger.getBinder();
+		
 	}
 
 	/**
@@ -164,6 +165,9 @@ public class BiopluxService extends Service {
 	 */
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.e(TAG, "Iniciamos conexion BITALINO");
+
+		
 		String recordingName = intent.getStringExtra (NewRecordingActivity.KEY_RECORDING_NAME).toString();
 		configuration = (DeviceConfiguration) intent.getSerializableExtra(NewRecordingActivity.KEY_CONFIGURATION);
 		samplingFrames = (double) configuration.getVisualizationFrequency() / configuration.getSamplingFrequency();
@@ -172,10 +176,10 @@ public class BiopluxService extends Service {
 
 		Log.i(TAG, "numberOfFrames "+numberOfFrames +" receptionFrequency() "+configuration.getVisualizationFrequency());
 		Log.i(TAG, "samplingFrames "+		samplingFrames);
-		frames = new Device.Frame[numberOfFrames];
-		for (int i = 0; i < frames.length; i++){
-			frames[i] = new Frame();
-		}
+	//Revisar	frames = new Device.Frame[numberOfFrames];
+		//Revisar		for (mes.length; i++){
+		//Revisar			frames[i] = new Frame();
+		//Revisar		}
 
 		if (connectToBiopluxDevice()) {
 			dataManager = new DataManager(this, recordingName, configuration);
@@ -195,26 +199,26 @@ public class BiopluxService extends Service {
 			areWeWritingDataToFile = true;
 		}
 
-		getFrames(numberOfFrames);
-		for (Frame frame : frames) {
+		BITalinoFrame[] frames=getFrames(numberOfFrames);
+		for (BITalinoFrame frame : frames) {
 			i++;
 			frameSeq = frameSeq+1 < 128 ? frameSeq+1:0;
 
-			if (frameSeq!= frame.seq || i==0){
+			if (frameSeq!= frame.getSequence() || i==0){
 
-				Log.e(TAG, "frameSeq "+		frameSeq+ " frame.seq "+frame.seq);
+				Log.e(TAG, "frameSeq "+		frameSeq+ " frame.seq "+frame.getSequence());
 				//sendErrorToActivity( BiopluxService.MSG_CONNECTION_ERROR2);
 				
-				Message message = Message.obtain(null, MSG_DEBUG_ERROR);
+			/*	Message message = Message.obtain(null, MSG_DEBUG_ERROR);
 				try {
 					client.send(message);
 				} catch (RemoteException e) {
 					Log.e(TAG, "client is dead. Service is being stpped", e);
-				}
+				}*/
 				
-				//Log.e(TAG, "frameSeq "+		frameSeq+ " frame.seq "+frame.seq);
+				Log.e(TAG, "frameSeq "+		frameSeq+ " frame.seq "+frame.getSequence());
 			}
-			if (!dataManager.writeFrameToTmpFile(frame, frame.seq)) {
+			if (!dataManager.writeFrameToTmpFile(frame, frame.getSequence())) {
 				sendErrorToActivity(CODE_ERROR_WRITING_TEXT_FILE);
 				killServiceError = true;
 				stopSelf();
@@ -228,7 +232,7 @@ public class BiopluxService extends Service {
 				// gets default share preferences with multi-process flag
 
 				if (clientActive || !clientActive && drawInBackground)
-					sendFrameToActivity(frame.an_in);
+					sendFrameToActivity(frame);
 				// retains the decimals
 				samplingCounter -= samplingFrames;
 			}
@@ -241,14 +245,14 @@ public class BiopluxService extends Service {
 	/**
 	 * Get frames from the bioplux device
 	 */
-	private void getFrames(int numberOfFrames) {
-		try {
-			connection.GetFrames(numberOfFrames, frames);
-		} catch (BPException e) {
-			Log.e(TAG, "Exception getting frames", e);
-			sendErrorToActivity(e.code);
-			stopSelf();
-		}
+	private BITalinoFrame[] getFrames(int numberOfFrames) {
+		Log.e(TAG, "BITALINO Read frames");
+
+			BITalinoFrame[] frames = connection.read(numberOfFrames);
+			Log.e(TAG, "BITALINO Readed");
+			for (BITalinoFrame frame : frames)
+	        	  Log.v(TAG,frame.toString());
+			return frames;
 	}
 
 	/**
@@ -259,28 +263,30 @@ public class BiopluxService extends Service {
 
 		Log.e(TAG, "connectToBiopluxDevice");
 		// BIOPLUX INITIALIZATION
-		try {
-			connection = Device.Create(configuration.getMacAddress());
-			connection.BeginAcq(configuration.getVisualizationFrequency(), 
-					configuration.getActiveChannelsAsInteger(),configuration.getNumberOfBits());
-
-			Log.e(TAG, "configuration.getNumberOfBits() "+configuration.getNumberOfBits());
-		} catch (BPException e) {
-			try {
-				connection.Close();
-			} catch (BPException e1) {
-				Log.e(TAG, "bioplux close connection exception", e1);
-				sendErrorToActivity(e1.code);
+		
+			connection = new BitalinoAndroidDevice(configuration.getMacAddress());
+			if(connection.connect(configuration.getVisualizationFrequency())!=0){
+				Log.e(TAG, "Bitalino connection error");				
+				killServiceError = true;
+				stopSelf();
+				
+				
+				return false;
+			}
+			if(connection.start()!=0){
+				Log.e(TAG, "Bitalino starting error");				
 				killServiceError = true;
 				stopSelf();
 				return false;
 			}
-			Log.e(TAG, "Bioplux connection exception", e);
-			sendErrorToActivity(e.code);
-			killServiceError = true;
-			stopSelf();
-			return false;
-		}
+			
+			//Revisar connection.BeginAcq(configuration.getVisualizationFrequency(), 
+			//Revisar 					configuration.getActiveChannelsAsInteger(),configuration.getNumberOfBits());
+
+			Log.e(TAG, "configuration.getNumberOfBits() "+configuration.getNumberOfBits());
+		
+			
+		
 		return true;
 	}
 
@@ -310,11 +316,18 @@ public class BiopluxService extends Service {
 	 * @param frame
 	 *            acquired from the bioplux device
 	 */
-	//comentario ¿intentar optimizar el envío de datos?
-	private void sendFrameToActivity(short[] frame) {
+	//comentario ï¿½intentar optimizar el envï¿½o de datos?
+	private void sendFrameToActivity(BITalinoFrame frame) {
 		Bundle b = new Bundle();
 		b.putDouble(KEY_X_VALUE, xValue);
-		b.putShortArray(KEY_FRAME_DATA, frame);
+		//Revisar
+		
+	     short[] frameShort=new short[6];
+	    for(int ind=0;ind<6;ind++){
+	    	frameShort[ind]=(short) (frame.getAnalog(ind));
+	    }
+		
+		b.putShortArray(KEY_FRAME_DATA, frameShort);
 		Message message = Message.obtain(null, MSG_DATA);
 		message.setData(b);
 		try {
@@ -375,13 +388,7 @@ public class BiopluxService extends Service {
 		}
 		if (!dataManager.closeWriters())
 			sendErrorToActivity(CODE_ERROR_SAVING_RECORDING);
-		try {
-			connection.EndAcq();
-			connection.Close();
-		} catch (BPException e) {
-			Log.e(TAG, "Exception ending ACQ", e);
-			sendErrorToActivity(e.code);
-		}
+			connection.stop();
 	}
 
 	@Override

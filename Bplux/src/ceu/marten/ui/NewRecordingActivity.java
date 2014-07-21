@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Date;
 
-import plux.android.bioplux.BPException;
-import plux.android.bioplux.Device;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -623,14 +621,11 @@ public class NewRecordingActivity extends OrmLiteBaseActivity<DatabaseHelper> im
 				new Thread(new Runnable() {
 			@Override
 			public void run() {
-				try {
-					Device connectionTest = Device.Create(recordingConfiguration.getMacAddress());
-					connectionTest.Close();
-				} catch (BPException e) {
-					connectionError = true;
-					bpErrorCode = e.code;
-					Log.e(TAG, "bioplux connection exception", e);
-				}
+				
+				//Revisar		BitalinoAndroidDevice connectionTest = new BitalinoAndroidDevice(recordingConfiguration.getMacAddress()); 
+					//Revisar
+					//Revisar					connectionTest.Close();
+				
 				
 				runOnUiThread(new Runnable(){
 				    public void run(){

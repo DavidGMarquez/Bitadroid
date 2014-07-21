@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import ceu.marten.bplux.R;
-import ceu.marten.services.BiopluxService;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;

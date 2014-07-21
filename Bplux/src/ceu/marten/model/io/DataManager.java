@@ -14,11 +14,12 @@ import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import com.bitalino.comm.BITalinoFrame;
+
 import ceu.marten.bplux.R;
 import ceu.marten.model.Constants;
 import ceu.marten.model.DeviceConfiguration;
 
-import plux.android.bioplux.Device.Frame;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -82,14 +83,14 @@ public class DataManager {
 	 * true if wrote successfully and false otherwise.
 	 */
 	private final StringBuilder sb = new StringBuilder(400);
-	public boolean writeFrameToTmpFile(Frame frame, int frameSeq) {
+	public boolean writeFrameToTmpFile(BITalinoFrame frame, int frameSeq) {
 		frameCounter ++;
 		sb.delete(0, sb.length());
 		try {
 			sb.append(frameSeq).append("\t").append(frameCounter).append("\t");
 			// WRITE THE DATA OF ACTIVE CHANNELS ONLY
 			for(int i=0; i< numberOfChannelsActivated;i++){
-				sb.append(frame.an_in[i]).append("\t");
+				sb.append(frame.getAnalog(i)).append("\t");
 			}
 			// WRITE A NEW LINE
 			bufferedWriter.write(sb.append("\n").toString());
