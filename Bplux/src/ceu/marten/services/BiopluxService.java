@@ -193,7 +193,7 @@ public class BiopluxService extends Service {
 	 * receives to a text file and send the requested frames to the activity
 	 */
 	private int frameSeq =-1;
-	int i =-1;
+	//Revisar int i =-1;
 	private void processFrames() {
 		synchronized (weAreWritingDataToFileLock) {
 			areWeWritingDataToFile = true;
@@ -201,20 +201,20 @@ public class BiopluxService extends Service {
 
 		BITalinoFrame[] frames=getFrames(numberOfFrames);
 		for (BITalinoFrame frame : frames) {
-			i++;
-			frameSeq = frameSeq+1 < 128 ? frameSeq+1:0;
+			//Revisar 	i++;
+			frameSeq = frameSeq+1 < 16 ? frameSeq+1:0;
 
-			if (frameSeq!= frame.getSequence() || i==0){
-
+			//Revisar if (frameSeq!= frame.getSequence() || i==0){
+			if (frameSeq!= frame.getSequence()){
 				Log.e(TAG, "frameSeq "+		frameSeq+ " frame.seq "+frame.getSequence());
-				//sendErrorToActivity( BiopluxService.MSG_CONNECTION_ERROR2);
+				//Revisar sendErrorToActivity( BiopluxService.MSG_CONNECTION_ERROR2);
 				
-			/*	Message message = Message.obtain(null, MSG_DEBUG_ERROR);
+				Message message = Message.obtain(null, MSG_DEBUG_ERROR);
 				try {
 					client.send(message);
 				} catch (RemoteException e) {
 					Log.e(TAG, "client is dead. Service is being stpped", e);
-				}*/
+				}
 				
 				Log.e(TAG, "frameSeq "+		frameSeq+ " frame.seq "+frame.getSequence());
 			}
