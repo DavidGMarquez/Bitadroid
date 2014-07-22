@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import ceu.marten.bplux.R;
+import ceu.marten.bitadroid.R;
 
 public class DisplayChannelsListAdapter extends ArrayAdapter<String>
 		implements OnClickListener {

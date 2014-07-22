@@ -1,6 +1,6 @@
 package ceu.marten.ui.dialogs;
 
-import ceu.marten.bplux.R;
+import ceu.marten.bitadroid.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;

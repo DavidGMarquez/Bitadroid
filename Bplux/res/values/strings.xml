@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Biofeedback</string>
+    <string name="app_name">Bitadroid</string>
     <string name="divider_image_content">divider</string>
     
     <!-- ACTIVITIES LABELS -->
-    <string name="home_label">Biofeedback</string>
+    <string name="home_label">Bitadroid</string>
     <string name="global_settings_label">Global settings</string>
     <string name="recording_settings_label">Recording Settings</string>
     <string name="configurations_label">Configurations</string>

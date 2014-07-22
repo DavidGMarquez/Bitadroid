@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.PopupMenu;
-import ceu.marten.bplux.R;
+import ceu.marten.bitadroid.R;
 import ceu.marten.model.Constants;
 import ceu.marten.ui.dialogs.AboutDialog;
 import ceu.marten.ui.dialogs.HelpDialog;

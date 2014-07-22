@@ -42,7 +42,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-import ceu.marten.bplux.R;
+import ceu.marten.bitadroid.R;
 import ceu.marten.model.Constants;
 import ceu.marten.model.DeviceConfiguration;
 import ceu.marten.model.DeviceRecording;

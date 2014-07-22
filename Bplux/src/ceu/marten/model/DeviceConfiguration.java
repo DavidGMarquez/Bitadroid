@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.content.Context;
-import ceu.marten.bplux.R;
+import ceu.marten.bitadroid.R;
 import ceu.marten.model.io.DatabaseHelper;
 
 import com.j256.ormlite.field.DataType;

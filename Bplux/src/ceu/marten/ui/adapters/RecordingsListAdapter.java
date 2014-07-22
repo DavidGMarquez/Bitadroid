@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import ceu.marten.bplux.R;
+import ceu.marten.bitadroid.R;
 import ceu.marten.model.DeviceRecording;
 
 import com.haarman.listviewanimations.ArrayAdapter;

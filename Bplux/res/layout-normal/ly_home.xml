@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_marginTop="10dp"
-                android:text="Biofeedback"
+                android:text="Bitadroid"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
 

@@ -2,7 +2,7 @@ package ceu.marten.ui;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import ceu.marten.bplux.R;
+import ceu.marten.bitadroid.R;
 import ceu.marten.model.Constants;
 
 public class SettingsActivity extends PreferenceActivity{

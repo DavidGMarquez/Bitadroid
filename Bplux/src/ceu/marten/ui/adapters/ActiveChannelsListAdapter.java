@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
-import ceu.marten.bplux.R;
+import ceu.marten.bitadroid.R;
 
 public class ActiveChannelsListAdapter extends ArrayAdapter<String> implements OnClickListener, OnItemSelectedListener {
 

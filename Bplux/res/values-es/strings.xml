@@ -1,10 +1,10 @@
 <resources>
 
-    <string name="app_name">Biofeedback</string>
+    <string name="app_name">Bitadroid</string>
     <string name="divider_image_content">"divisor"</string>
     
     <!-- ACTIVITIES LABELS -->
-    <string name="home_label">Biofeedback</string>
+    <string name="home_label">Bitadroid</string>
     <string name="global_settings_label">Ajustes generales</string>
     <string name="recording_settings_label">Ajustes de grabación</string>
     <string name="configurations_label">Configuraciones</string>

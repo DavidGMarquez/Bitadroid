@@ -5,7 +5,7 @@ import java.io.Serializable;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Paint.Align;
-import ceu.marten.bplux.R;
+import ceu.marten.bitadroid.R;
 
 import com.jjoe64.graphview.CustomLabelFormatter;
 import com.jjoe64.graphview.GraphView;

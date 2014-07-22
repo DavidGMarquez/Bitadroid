@@ -27,7 +27,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
-import ceu.marten.bplux.R;
+import ceu.marten.bitadroid.R;
 import ceu.marten.model.DeviceConfiguration;
 import ceu.marten.ui.adapters.ActiveChannelsListAdapter;
 import ceu.marten.ui.adapters.DisplayChannelsListAdapter;
@@ -243,7 +243,7 @@ public class NewConfigurationActivity extends Activity {
 				((RadioButton)findViewById(R.id.radioBttn12)).setChecked(true);
 				((RadioButton)findViewById(R.id.radioBttn8)).setChecked(false);
 			}
-			else{//necesario porque si no hay configuración vieja siempre está activado 12 bits
+			else{//necesario porque si no hay configuraciï¿½n vieja siempre estï¿½ activado 12 bits
 				((RadioButton)findViewById(R.id.radioBttn12)).setChecked(false);
 				((RadioButton)findViewById(R.id.radioBttn8)).setChecked(true);
 			}

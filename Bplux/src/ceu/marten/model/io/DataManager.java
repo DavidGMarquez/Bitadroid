@@ -16,7 +16,7 @@ import java.util.zip.ZipOutputStream;
 
 import com.bitalino.comm.BITalinoFrame;
 
-import ceu.marten.bplux.R;
+import ceu.marten.bitadroid.R;
 import ceu.marten.model.Constants;
 import ceu.marten.model.DeviceConfiguration;
 
