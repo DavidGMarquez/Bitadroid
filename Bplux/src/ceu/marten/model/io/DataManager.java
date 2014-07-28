@@ -28,6 +28,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.StatFs;
+import android.util.JsonWriter;
 import android.util.Log;
 
 
@@ -109,7 +110,7 @@ public class DataManager {
 	 * Returns true if the text file was written successfully or false if an
 	 * exception was caught
 	 */
-	private boolean appendHeader() {
+	private boolean appendHeaderOld() {
 		
 		DateFormat dateFormat = DateFormat.getDateTimeInstance();
 		String tmpFilePath = context.getFilesDir() + "/" + Constants.TEMP_FILE;
@@ -181,6 +182,92 @@ public class DataManager {
 		return true;
 	}
 
+	/**
+	 * New header makes to work with BioSignals
+	 * Creates and appends the header on the recording session file
+	 * 
+	 * Returns true if the text file was written successfully or false if an
+	 * exception was caught
+	 */
+	private boolean appendHeader() {
+		
+		DateFormat dateFormat = DateFormat.getDateTimeInstance();
+		String tmpFilePath = context.getFilesDir() + "/" + Constants.TEMP_FILE;
+		Date date = new Date();
+		OutputStreamWriter out = null;
+		BufferedInputStream origin = null;
+		BufferedOutputStream dest = null;
+		FileInputStream fi = null;
+		
+		try {
+			out = new OutputStreamWriter(context.openFileOutput(recordingName + ".txt", Context.MODE_PRIVATE));
+			out.write("# {");
+			out.write("\"date\": ");
+			out.write("\""+dateFormat.format(date)+"\", ");
+			out.write("\"SamplingRate\": ");
+			out.write(configuration.getSamplingFrequency()+", ");
+			out.write("\"ChannelsOrder\": ");
+			out.write("[");
+			
+			out.write("\"signals/others/SeqN\", ");
+			out.write("\"signals/others/Ind\"");
+			for(int i: configuration.getActiveChannels()){
+				out.write(", \"signals/AnalogInputs/Analog"+i+"/Signal"+i+"\"");
+			}			
+			out.write("], ");
+			out.write("\"Comments\": ");
+			out.write("\"Bitadroid Record\"");
+			out.write("}");
+			out.write("\n");
+						
+			out.flush();
+			out.close();
+	
+			// APPEND DATA
+			FileOutputStream outBytes = new FileOutputStream(context.getFilesDir()
+											+ "/" + recordingName + Constants.TEXT_FILE_EXTENTION, true);
+			dest = new BufferedOutputStream(outBytes);
+			fi = new FileInputStream(tmpFilePath);
+			 
+			origin = new BufferedInputStream(fi, BUFFER);
+			int count;
+			byte data[] = new byte[BUFFER];
+			
+			Long tmpFileSize = (new File(tmpFilePath)).length();
+			long currentBitsCopied = 0;
+			
+			while ((count = origin.read(data, 0, BUFFER)) != -1) {
+				dest.write(data, 0, count);
+				currentBitsCopied += BUFFER;
+				sendPercentageToActivity((int)( currentBitsCopied * 100 / tmpFileSize), STATE_APPENDING_HEADER);
+			}
+	
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "File to write header on, not found", e);
+			return false;
+		} catch (IOException e) {
+			Log.e(TAG, "Write header stream exception", e);
+			return false;
+		}
+		finally{
+			try {
+				fi.close();
+				out.close();
+				origin.close();
+				dest.close();
+				context.deleteFile(Constants.TEMP_FILE);
+			} catch (IOException e) {
+				try {out.close();} catch (IOException e1) {}
+				try {origin.close();} catch (IOException e1) {}
+				try {dest.close();} catch (IOException e1) {};
+				Log.e(TAG, "Closing streams exception", e);
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
 	/**
 	 * Returns true if compressed successfully and false otherwise.
 	 */

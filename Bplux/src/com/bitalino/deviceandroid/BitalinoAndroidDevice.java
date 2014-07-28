@@ -11,6 +11,14 @@ import com.bitalino.comm.BITalinoDevice;
 import com.bitalino.comm.BITalinoException;
 import com.bitalino.comm.BITalinoFrame;
 
+/**
+ * Wrapper for the Java SDK of Bitalino by ppires
+ * 
+ * @author David Gonzalez
+ * 
+ */
+
+
 public class BitalinoAndroidDevice{
 	private String remoteDeviceMAC = "98:D3:31:B2:BD:41";
 	private int sampleRate=1000;
