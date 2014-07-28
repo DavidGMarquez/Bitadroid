@@ -4,7 +4,7 @@ Copyright 2014<br><br>
 
 <b>Developed by Carlos Marten</b><br>
 martencarlos@gmail.com<br>
-<b>and by Abraham Otero</b><br>
-abraham.otero@gmail.com
+<b> by Abraham Otero</b><br>
+abraham.otero@gmail.com<br>
 <b>and by David G Marquez</b><br>
 david.gonzalez.marquez@gmail.com

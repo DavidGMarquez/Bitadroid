@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeSet;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,12 +47,15 @@ public class NewConfigurationActivity extends Activity {
 
 	// FREQUENCIES MIN, MAX AND DEFUALT VALUES 
 	private static final int RECEPTION_FREQ_MAX = 1000;
-	private static final int RECEPTION_FREQ_MIN = 36;
-	private static final int DEFAULT_RECEPTION_FREQ = 500;
+	private static final int RECEPTION_FREQ_MIN = 1;
+	private static final int DEFAULT_RECEPTION_FREQ = 100;
 	private static final int SAMPLING_FREQ_MAX = 100;
 	private static final int SAMPLING_FREQ_MIN = 1;
 	private static final int DEFAULT_SAMPLING_FREQ = 50;
 	private static final int DEFAULT_NUMBER_OF_BITS = 12;
+	 private static final TreeSet<Integer> ALLOW_RECEPTION_FREQ = new TreeSet<Integer>(Arrays.asList(1,10,100,1000));
+	    	    
+	
 
 	// ANDROID' WIDGETS AND ITS LAYOUT INFLATER
 	private SeekBar receptionfreqSeekbar, samplingfreqSeekbar;
@@ -108,8 +113,11 @@ public class NewConfigurationActivity extends Activity {
 					public void onProgressChanged(SeekBar seekBar,
 							int progress, boolean changedByUser) {
 						if (changedByUser) {
-							receptionFreqEditor.setText(String.valueOf(progress + RECEPTION_FREQ_MIN));
-							newConfiguration.setVisualizationFrequency(progress + RECEPTION_FREQ_MIN);
+							int valueToChangeRounded=ALLOW_RECEPTION_FREQ.floor(progress+1)-RECEPTION_FREQ_MIN;
+							Log.i("TRYANDROID", "samplingprogress "+		progress+" floor:"+valueToChangeRounded);
+							
+							receptionFreqEditor.setText(String.valueOf(valueToChangeRounded + RECEPTION_FREQ_MIN));
+							newConfiguration.setVisualizationFrequency(valueToChangeRounded + RECEPTION_FREQ_MIN);
 						}
 					}
 					// needed for the listener
@@ -591,7 +599,7 @@ public class NewConfigurationActivity extends Activity {
 	 * Cancels the creation/modification of new {@link DeviceConfiguration}.
 	 * Displays an info toast to inform the client that its configuration has
 	 * been canceled
-	 * /
+	 */
 	public void onClickedCancel(View cancelButtonView) {
 		finish();
 		overridePendingTransition(R.anim.slide_in_top, R.anim.slide_out_bottom);

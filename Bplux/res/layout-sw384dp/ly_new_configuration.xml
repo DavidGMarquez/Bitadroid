@@ -110,10 +110,10 @@
                         android:id="@+id/nc_reception_seekbar"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:max="964"
+                        android:layout_weight="1"         
+                        android:max="999"
                         android:paddingTop="5dip"
-                        android:progress="482" />
+                        android:progress="100" />
 
                     <EditText
                         android:id="@+id/nc_reception_freq_view"

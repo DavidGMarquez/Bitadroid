@@ -26,7 +26,7 @@
 	<!-- LAYOUTS -->
     <!-- HOME ACTIVITY -->
     <string name="ha_title">"Bienvenido,"</string>
-    <string name="ha_description">Antes de realizar la grabación asegúrese de tener BioPlux encendido y con la batería suficiente para realizar la grabación.
+    <string name="ha_description">Antes de realizar la grabación asegúrese de tener su Bitalino encendido y con la batería suficiente para realizar la grabación.
 </string>
     <string name="ha_button1">"Iniciar grabación"</string>
     <string name="ha_button2">"Examinar Grabaciones"</string>
@@ -95,7 +95,7 @@
     <string name="nc_mac_address">Dirección MAC</string>
     <string name="nc_mac_address_hint">00: B0: D0: 86: BB: F7</string>
     <string name="nc_frequency_reception">Frecuencia de adquisición</string>
-    <string name="nc_frequency_reception_default">"500"</string>
+    <string name="nc_frequency_reception_default">"100"</string>
     <string name="nc_frequency_metric">Hz</string>
     <string name="nc_frequency_sampling">Frecuencia de visualización</string>
     <string name="nc_frequency_sampling_default">50</string>
@@ -147,10 +147,10 @@
     <string name="nr_overwrite_dialog_message">La grabacion actual se perderá. ¿Desea continuar?</string>
     <string name="nr_back_dialog_message">Si procedes, la grabación será detenida y almacenada</string>
     <string name="nr_overwrite_dialog_positive_button">Continuar</string>
-    <string name="nr_bluetooth_dialog_message">Bluetooth tiene que estar encendido para la conexión con el dispositivo Bioplux</string>
+    <string name="nr_bluetooth_dialog_message">Bluetooth tiene que estar encendido para la conexión con el dispositivo Bitalino</string>
     <string name="nr_back_dialog_positive_button">Proceder</string>
     <string name="nr_bluetooth_dialog_positive_button">Conectar</string>
-    <string name="nr_progress_dialog_title">Buscando dispositivos Bioplux</string>
+    <string name="nr_progress_dialog_title">Buscando dispositivos Bitalino</string>
     <string name="nr_progress_dialog_message">Intentando establecer conexion</string>
     <string name="nr_saving_dialog_title">Almacenando grabación</string>
     <string name="nr_saving_dialog_adding_header_message">Adjuntando la cabecera de la grabación</string>
@@ -159,8 +159,8 @@
     <!-- BIOPLUX NOTIFICATION MESSAGES -->
     <string name="bp_address_incorrect">La dirección MAC especificada es sintaticamente incorrecta</string>
     <string name="bp_adapter_not_found">No se encuentra ningún adaptador bluetooth. Verifica que el adaptador está conectado y encendido</string>
-    <string name="bp_device_not_found">El dispositivo Plux no se encuentra. Verifica que está al alcance, encendido y su batería esta bien (luz roja está apagada)</string>
-    <string name="bp_contacting_device">Se ha perdido la comunicación con el dispositivo Plux. Verifica que está al alcance, encendido y su batería esta bien (luz roja está apagada)</string>
+    <string name="bp_device_not_found">El dispositivo Bitalino no se encuentra. Verifica que está al alcance, encendido y su batería esta bien (luz roja está apagada)</string>
+    <string name="bp_contacting_device">Se ha perdido la comunicación con el dispositivo Bitalino. Verifica que está al alcance, encendido y su batería esta bien (luz roja está apagada)</string>
     <string name="bp_port_could_not_be_opened">El puerto de comunicación no existe o está siendo usado</string>
     <string name="bp_error_writing_a_frame">Hubo un error al almacenar muestras en la memoria interna de su dispositivo</string>
     <string name="bp_error_saving_recording">Su dispositivo no tiene suficiente memoria libre para almacenar la grabación</string>
@@ -176,7 +176,7 @@
     <string name="bs_header_active_channels">Canales activos: </string>
     
     <string name="bs_notification_title">Dispositivo conectado</string>
-    <string name="bs_notification_message">Recibiendo muestras del dispositivo bioplux..</string>
+    <string name="bs_notification_message">Recibiendo muestras del dispositivo Bitalino.</string>
     
     
     <!-- DIALOG NAME -->

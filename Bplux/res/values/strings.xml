@@ -28,7 +28,7 @@
     <!-- LAYOUTS -->
     <!-- HOME ACTIVITY -->
     <string name="ha_title">Welcome,</string>
-    <string name="ha_description">Before starting a recording check that the Plux device is on and it has enough battery to perform the recording.</string>
+    <string name="ha_description">Before starting a recording check that the Bitalino device is on and it has enough battery to perform the recording.</string>
     <string name="ha_button1">Start Recording</string>
     <string name="ha_button2">Browse Recordings</string>
     
@@ -97,7 +97,7 @@
     <string name="nc_mac_address">MAC address</string>
     <string name="nc_mac_address_hint">00:B0:D0:86:BB:F7</string>
     <string name="nc_frequency_reception">"Reception frequency"</string>
-    <string name="nc_frequency_reception_default">"500"</string>
+    <string name="nc_frequency_reception_default">"100"</string>
     <string name="nc_frequency_metric">"Hz"</string>
     <string name="nc_frequency_sampling">"Sampling frequency"</string>
     <string name="nc_frequency_sampling_default">"50"</string>
@@ -149,16 +149,16 @@
     <string name="nr_overwrite_dialog_message">The actual recording will be lost. Do you wish to proceed?</string>
     <string name="nr_overwrite_dialog_positive_button">Proceed</string>
     <string name="nr_back_dialog_message">If you wish to proceed, recording will be stopped and saved</string>
-    <string name="nr_bluetooth_dialog_message">Bluetooth has to be enabled to connect to the Bioplux device</string>
+    <string name="nr_bluetooth_dialog_message">Bluetooth has to be enabled to connect to the Bitalino device</string>
     <string name="nr_back_dialog_positive_button">Proceed</string>
     <string name="nr_bluetooth_dialog_positive_button">Connect</string>
-    <string name="nr_progress_dialog_title">Looking for Bioplux devices</string>
+    <string name="nr_progress_dialog_title">Looking for Bitalino devices</string>
     <string name="nr_progress_dialog_message">Trying to connect to devices in range</string>
     <string name="nr_saving_dialog_title">Saving recording</string>
     <string name="nr_saving_dialog_adding_header_message">Adding header to recording text file</string>
     <string name="nr_saving_dialog_compressing_message">Compressing recording. This might take a minute</string>
     
-    <!-- BIOPLUX ERROR/WARNING MESSAGES -->
+    <!-- BIO ERROR/WARNING MESSAGES -->
     <string name="bp_address_incorrect">The specified MAC address is not correct</string>
     <string name="bp_adapter_not_found">No bluetooth adapter was found. Verify if an adapter is connected and turned on</string>
     <string name="bp_device_not_found">The Plux device could not be found. Verify that it is whithin range, turned on, and that the battery is OK (red led turned off)</string>
