@@ -201,24 +201,42 @@ public class DataManager {
 		
 		try {
 			out = new OutputStreamWriter(context.openFileOutput(recordingName + ".txt", Context.MODE_PRIVATE));
-			out.write("# {");
-			out.write("\"date\": ");
-			out.write("\""+dateFormat.format(date)+"\", ");
-			out.write("\"SamplingRate\": ");
-			out.write(configuration.getSamplingFrequency()+", ");
-			out.write("\"ChannelsOrder\": ");
-			out.write("[");
+			out.write("# JSON Text File Format\n");
 			
+			
+			out.write("# {");
+
+			out.write("\"SamplingResolution\": ");
+			out.write("\"10\", ");
+			out.write("\"SampledChannels\": ");
+			
+			int numChannels=configuration.getActiveChannels().size()+2;
+			out.write("[");
+			for(int i=1;i<numChannels;i++){
+				out.write(i+", ");
+			}
+			out.write(numChannels+"");
+			out.write("], ");
+			out.write("\"SamplingFrequency\": ");
+			out.write("\""+configuration.getSamplingFrequency()+"\", ");
+			out.write("\"ColumnLabels\": ");
+			out.write("[");
 			out.write("\"signals/others/SeqN\", ");
 			out.write("\"signals/others/Ind\"");
 			for(int i: configuration.getActiveChannels()){
 				out.write(", \"signals/AnalogInputs/Analog"+i+"/Signal"+i+"\"");
 			}			
 			out.write("], ");
-			out.write("\"Comments\": ");
-			out.write("\"Bitadroid Record\"");
+			
+			out.write("\"AcquiringDevice\": ");
+			out.write("\""+configuration.getMacAddress()+"\", ");
+			out.write("\"Version\": ");
+			out.write("\""+"111"+"\", ");
+			out.write("\"StartDateTime\": ");
+			out.write("\""+dateFormat.format(date)+"\"");
 			out.write("}");
 			out.write("\n");
+			out.write("# EndOfHeader\n");
 						
 			out.flush();
 			out.close();
