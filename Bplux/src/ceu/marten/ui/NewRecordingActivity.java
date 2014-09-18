@@ -165,19 +165,6 @@ public class NewRecordingActivity extends OrmLiteBaseActivity<DatabaseHelper> im
 				displayConnectionErrorDialog(msg.arg1);
 				break;
 			}
-			case BiopluxService.MSG_DEBUG_ERROR: {
-				final AlertDialog.Builder alert = new AlertDialog.Builder(NewRecordingActivity.this);
-				alert.setMessage("La cargamos: " + "frameSeq ");
-				alert.setPositiveButton("Ok", new
-
-				DialogInterface.OnClickListener() {
-
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				});
-				alert.show();
-				break;
-			}
 			case DataManager.MSG_PERCENTAGE: {
 				if (!savingDialogMessageChanged && msg.arg2 == DataManager.STATE_COMPRESSING_FILE) {
 					savingDialog.setMessage(getString(R.string.nr_saving_dialog_compressing_message));

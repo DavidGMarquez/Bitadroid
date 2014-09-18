@@ -46,7 +46,6 @@ public class BiopluxService extends Service {
 	public static final int MSG_RECORDING_DURATION = 3;
 	public static final int MSG_SAVED = 4;
 	public static final int MSG_CONNECTION_ERROR = 5;
-	public static final int MSG_DEBUG_ERROR =6;
 
 	public static final String KEY_X_VALUE = "xValue";
 	public static final String KEY_FRAME_DATA = "frame";
@@ -204,20 +203,6 @@ public class BiopluxService extends Service {
 			//Revisar 	i++;
 			frameSeq = frameSeq+1 < 16 ? frameSeq+1:0;
 
-			//Revisar if (frameSeq!= frame.getSequence() || i==0){
-			if (frameSeq!= frame.getSequence()){
-				Log.e(TAG, "frameSeq "+		frameSeq+ " frame.seq "+frame.getSequence());
-				//Revisar sendErrorToActivity( BiopluxService.MSG_CONNECTION_ERROR2);
-				
-				Message message = Message.obtain(null, MSG_DEBUG_ERROR);
-				try {
-					client.send(message);
-				} catch (RemoteException e) {
-					Log.e(TAG, "client is dead. Service is being stpped", e);
-				}
-				
-				Log.e(TAG, "frameSeq "+		frameSeq+ " frame.seq "+frame.getSequence());
-			}
 			if (!dataManager.writeFrameToTmpFile(frame, frame.getSequence())) {
 				sendErrorToActivity(CODE_ERROR_WRITING_TEXT_FILE);
 				killServiceError = true;

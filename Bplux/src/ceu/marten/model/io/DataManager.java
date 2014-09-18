@@ -53,8 +53,7 @@ public class DataManager {
 	private BufferedWriter bufferedWriter;
 	private int BUFFER = 524288; // 0.5MB Optimal for Android devices
 	private int numberOfChannelsActivated;
-	private int frameCounter = 0;
-	
+
 	private String recordingName;
 	private String duration;
 	
@@ -85,10 +84,9 @@ public class DataManager {
 	 */
 	private final StringBuilder sb = new StringBuilder(400);
 	public boolean writeFrameToTmpFile(BITalinoFrame frame, int frameSeq) {
-		frameCounter ++;
 		sb.delete(0, sb.length());
 		try {
-			sb.append(frameSeq).append("\t").append(frameCounter).append("\t");
+			sb.append(frameSeq).append("\t");
 			// WRITE THE DATA OF ACTIVE CHANNELS ONLY
 			for(int i=0; i< numberOfChannelsActivated;i++){
 				sb.append(frame.getAnalog(i)).append("\t");
