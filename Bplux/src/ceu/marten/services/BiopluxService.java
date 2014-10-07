@@ -1,5 +1,7 @@
 package ceu.marten.services;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -56,8 +58,8 @@ public class BiopluxService extends Service {
 
 	// Get 80 frames every 50 miliseconds
 	private int numberOfFrames;
-	
-	public static final int TIMER_TIME =50;// cambiar
+
+	public static final int TIMER_TIME = 50;// cambiar
 
 	// Used to synchronize timer and main thread
 	private static final Object weAreWritingDataToFileLock = new Object();
@@ -67,7 +69,7 @@ public class BiopluxService extends Service {
 	private WakeLock wakeLock = null;
 
 	private DeviceConfiguration configuration;
-	private BitalinoAndroidDevice connection;	
+	private BitalinoAndroidDevice connection;
 
 	private Timer timer = null;
 	private DataManager dataManager;
@@ -81,10 +83,10 @@ public class BiopluxService extends Service {
 	Notification serviceNotification = null;
 	private SharedPreferences sharedPref;
 
-	//Target we publish for clients to send messages to IncomingHandler
+	// Target we publish for clients to send messages to IncomingHandler
 	private final Messenger mMessenger = new Messenger(new IncomingHandler());
 
-	//Messenger with interface for sending messages from the service
+	// Messenger with interface for sending messages from the service
 	private Messenger client = null;
 
 	/**
@@ -112,7 +114,8 @@ public class BiopluxService extends Service {
 				}
 				break;
 			case MSG_RECORDING_DURATION:
-				dataManager.setDuration(msg.getData().getString(NewRecordingActivity.KEY_DURATION));
+				dataManager.setDuration(msg.getData().getString(
+						NewRecordingActivity.KEY_DURATION));
 				break;
 			default:
 				super.handleMessage(msg);
@@ -126,10 +129,14 @@ public class BiopluxService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		sharedPref = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_MULTI_PROCESS);
-		drawInBackground = sharedPref.getBoolean(SettingsActivity.KEY_DRAW_IN_BACKGROUND, true);
-		powerManager = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
-		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"MyWakeLock");
+		sharedPref = getSharedPreferences(getPackageName() + "_preferences",
+				Context.MODE_MULTI_PROCESS);
+		drawInBackground = sharedPref.getBoolean(
+				SettingsActivity.KEY_DRAW_IN_BACKGROUND, true);
+		powerManager = (PowerManager) this
+				.getSystemService(Context.POWER_SERVICE);
+		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+				"MyWakeLock");
 		if ((wakeLock != null) && (wakeLock.isHeld() == false)) {
 			wakeLock.acquire();
 		}
@@ -140,10 +147,10 @@ public class BiopluxService extends Service {
 	 * cannot bind to the service
 	 */
 	@Override
-	public IBinder onBind(Intent intent) {	
-		Log.i(TAG, "onBind");		
+	public IBinder onBind(Intent intent) {
+		Log.i(TAG, "onBind");
 		return mMessenger.getBinder();
-		
+
 	}
 
 	/**
@@ -166,19 +173,27 @@ public class BiopluxService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.e(TAG, "Iniciamos conexion BITALINO");
 
-		
-		String recordingName = intent.getStringExtra (NewRecordingActivity.KEY_RECORDING_NAME).toString();
-		configuration = (DeviceConfiguration) intent.getSerializableExtra(NewRecordingActivity.KEY_CONFIGURATION);
-		samplingFrames = (double) configuration.getVisualizationFrequency() / configuration.getSamplingFrequency();
-		
-		numberOfFrames = (int)(TIMER_TIME*configuration.getVisualizationFrequency()/1000);// We round upthe number of frames
+		String recordingName = intent.getStringExtra(
+				NewRecordingActivity.KEY_RECORDING_NAME).toString();
+		configuration = (DeviceConfiguration) intent
+				.getSerializableExtra(NewRecordingActivity.KEY_CONFIGURATION);
+		samplingFrames = (double) configuration.getVisualizationFrequency()
+				/ configuration.getSamplingFrequency();
 
-		Log.i(TAG, "numberOfFrames "+numberOfFrames +" receptionFrequency() "+configuration.getVisualizationFrequency());
-		Log.i(TAG, "samplingFrames "+		samplingFrames);
-	//Revisar	frames = new Device.Frame[numberOfFrames];
-		//Revisar		for (mes.length; i++){
-		//Revisar			frames[i] = new Frame();
-		//Revisar		}
+		numberOfFrames = (int) (TIMER_TIME
+				* configuration.getVisualizationFrequency() / 1000);// We round
+																	// upthe
+																	// number of
+																	// frames
+
+		Log.i(TAG,
+				"numberOfFrames " + numberOfFrames + " receptionFrequency() "
+						+ configuration.getVisualizationFrequency());
+		Log.i(TAG, "samplingFrames " + samplingFrames);
+		// Revisar frames = new Device.Frame[numberOfFrames];
+		// Revisar for (mes.length; i++){
+		// Revisar frames[i] = new Frame();
+		// Revisar }
 
 		if (connectToBiopluxDevice()) {
 			dataManager = new DataManager(this, recordingName, configuration);
@@ -191,17 +206,18 @@ public class BiopluxService extends Service {
 	 * Gets and process the frames from the bioplux device. Saves all the frames
 	 * receives to a text file and send the requested frames to the activity
 	 */
-	private int frameSeq =-1;
-	//Revisar int i =-1;
+	private int frameSeq = -1;
+
+	// Revisar int i =-1;
 	private void processFrames() {
 		synchronized (weAreWritingDataToFileLock) {
 			areWeWritingDataToFile = true;
 		}
 
-		BITalinoFrame[] frames=getFrames(numberOfFrames);
+		BITalinoFrame[] frames = getFrames(numberOfFrames);
 		for (BITalinoFrame frame : frames) {
-			//Revisar 	i++;
-			frameSeq = frameSeq+1 < 16 ? frameSeq+1:0;
+			// Revisar i++;
+			frameSeq = frameSeq + 1 < 16 ? frameSeq + 1 : 0;
 
 			if (!dataManager.writeFrameToTmpFile(frame, frame.getSequence())) {
 				sendErrorToActivity(CODE_ERROR_WRITING_TEXT_FILE);
@@ -213,7 +229,8 @@ public class BiopluxService extends Service {
 			if (samplingCounter++ >= samplingFrames) {
 				// calculates x value of graphs
 				timeCounter++;
-				xValue = timeCounter / configuration.getSamplingFrequency() * 1000;
+				xValue = timeCounter / configuration.getSamplingFrequency()
+						* 1000;
 				// gets default share preferences with multi-process flag
 
 				if (clientActive || !clientActive && drawInBackground)
@@ -233,11 +250,11 @@ public class BiopluxService extends Service {
 	private BITalinoFrame[] getFrames(int numberOfFrames) {
 		Log.e(TAG, "BITALINO Read frames");
 
-			BITalinoFrame[] frames = connection.read(numberOfFrames);
-			Log.e(TAG, "BITALINO Readed");
-			for (BITalinoFrame frame : frames)
-	        	  Log.v(TAG,frame.toString());
-			return frames;
+		BITalinoFrame[] frames = connection.read(numberOfFrames);
+		Log.e(TAG, "BITALINO Readed");
+		for (BITalinoFrame frame : frames)
+			Log.v(TAG, frame.toString());
+		return frames;
 	}
 
 	/**
@@ -248,31 +265,49 @@ public class BiopluxService extends Service {
 
 		Log.e(TAG, "connectToBiopluxDevice");
 		// BIOPLUX INITIALIZATION
-		
-			connection = new BitalinoAndroidDevice(configuration.getMacAddress());
-			if(connection.connect(configuration.getVisualizationFrequency())!=0){
-				Log.e(TAG, "Bitalino connection error");				
-				killServiceError = true;
-				stopSelf();
-				
-				
-				return false;
-			}
-			if(connection.start()!=0){
-				Log.e(TAG, "Bitalino starting error");				
-				killServiceError = true;
-				stopSelf();
-				return false;
-			}
-			
-			//Revisar connection.BeginAcq(configuration.getVisualizationFrequency(), 
-			//Revisar 					configuration.getActiveChannelsAsInteger(),configuration.getNumberOfBits());
+		connection = new BitalinoAndroidDevice(configuration.getMacAddress());
+		ArrayList<Integer> activeChannels = configuration.getActiveChannels();
+		int[] activeChannelsArray = convertToBitalinoChannelsArray(activeChannels);
 
-			Log.e(TAG, "configuration.getNumberOfBits() "+configuration.getNumberOfBits());
-		
-			
-		
+		if (connection.connect(configuration.getVisualizationFrequency(),
+				activeChannelsArray) != 0) {
+			Log.e(TAG, "Bitalino connection error");
+			killServiceError = true;
+			stopSelf();
+
+			return false;
+		}
+		if (connection.start() != 0) {
+			Log.e(TAG, "Bitalino starting error");
+			killServiceError = true;
+			stopSelf();
+			return false;
+		}
+
+		// Revisar
+		// connection.BeginAcq(configuration.getVisualizationFrequency(),
+		// Revisar
+		// configuration.getActiveChannelsAsInteger(),configuration.getNumberOfBits());
+
+		Log.e(TAG,
+				"configuration.getNumberOfBits() "
+						+ configuration.getNumberOfBits());
+
 		return true;
+	}
+
+	private int[] convertToBitalinoChannelsArray(
+			ArrayList<Integer> activeChannels) {
+		int[] activeChannelsArray = new int[activeChannels.size()];
+		Iterator<Integer> iterator = activeChannels.iterator();
+		Log.e(TAG, "BITALINO ActiveChannels ");
+
+		for (int i = 0; i < activeChannelsArray.length; i++) {
+			activeChannelsArray[i] = iterator.next().intValue()-1;
+			Log.e(TAG, "BITALINO ActiveChannels C" + activeChannelsArray[i]);
+		}
+
+		return activeChannelsArray;
 	}
 
 	private void createNotification() {
@@ -301,17 +336,29 @@ public class BiopluxService extends Service {
 	 * @param frame
 	 *            acquired from the bioplux device
 	 */
-	//comentario �intentar optimizar el env�o de datos?
+	// comentario �intentar optimizar el env�o de datos?
 	private void sendFrameToActivity(BITalinoFrame frame) {
 		Bundle b = new Bundle();
 		b.putDouble(KEY_X_VALUE, xValue);
-		//Revisar
+		// Revisar
+
 		
-	     short[] frameShort=new short[6];
-	    for(int ind=0;ind<6;ind++){
-	    	frameShort[ind]=(short) (frame.getAnalog(ind));
-	    }
 		
+		//Bitalino always send 6 channels but only active which you selected
+		ArrayList<Integer> activeChannels = configuration.getActiveChannels();
+		int[] activeChannelsArray = convertToBitalinoChannelsArray(activeChannels);
+		int firstChannelUsed=activeChannelsArray[0];
+		
+		short[] frameShort = new short[6];
+		
+		
+		for (int ind = 0; (ind+firstChannelUsed) < 6; ind++) {
+			frameShort[ind] = (short) (frame.getAnalog(firstChannelUsed+ind));
+		}
+		for(int indTemp=firstChannelUsed;indTemp>0;indTemp--){
+			frameShort[6-indTemp]=0;
+		}
+
 		b.putShortArray(KEY_FRAME_DATA, frameShort);
 		Message message = Message.obtain(null, MSG_DATA);
 		message.setData(b);
@@ -343,9 +390,12 @@ public class BiopluxService extends Service {
 	 */
 	private void sendErrorToActivity(int errorCode) {
 		try {
-			client.send(Message.obtain(null, MSG_CONNECTION_ERROR, errorCode, 0));
+			client.send(Message
+					.obtain(null, MSG_CONNECTION_ERROR, errorCode, 0));
 		} catch (RemoteException e) {
-			Log.e(TAG, "Exception sending error message to activity. Service is stopping", e);
+			Log.e(TAG,
+					"Exception sending error message to activity. Service is stopping",
+					e);
 		}
 	}
 
@@ -373,7 +423,7 @@ public class BiopluxService extends Service {
 		}
 		if (!dataManager.closeWriters())
 			sendErrorToActivity(CODE_ERROR_SAVING_RECORDING);
-			connection.stop();
+		connection.stop();
 	}
 
 	@Override

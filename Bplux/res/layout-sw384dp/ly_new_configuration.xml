@@ -201,47 +201,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
-                android:orientation="horizontal"
-                android:paddingLeft="10dip" >
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingTop="5dip"
-                    android:text="@string/nc_bits"
-                    android:textColor="@color/grey"
-                    android:textSize="@dimen/new_configuration_text_size" />
-
-                <RadioGroup
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dip" >
-
-                    <RadioButton
-                        android:id="@+id/radioBttn8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="onRadioButtonClicked"
-                        android:text="@string/nc_bits_eight"
-                        android:textColor="@color/grey" />
-
-                    <RadioButton
-                        android:id="@+id/radioBttn12"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="onRadioButtonClicked"
-                        android:checked="true"
-                        android:text="@string/nc_bits_twelve"
-                        android:textColor="@color/grey" />
-                </RadioGroup>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginBottom="15dip"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dip"

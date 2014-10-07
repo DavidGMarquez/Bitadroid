@@ -247,14 +247,6 @@ public class NewConfigurationActivity extends Activity {
 			activeChannelsTV.setText(getString(R.string.nc_channels_to_activate)+" "+oldConfiguration.getActiveChannels());
 			displayChannelsTV.setVisibility(View.VISIBLE);
 			displayChannelsTV.setText(oldConfiguration.getDisplayChannelsWithSensors());
-			if(oldConfiguration.getNumberOfBits() == 12){
-				((RadioButton)findViewById(R.id.radioBttn12)).setChecked(true);
-				((RadioButton)findViewById(R.id.radioBttn8)).setChecked(false);
-			}
-			else{//necesario porque si no hay configuraci�n vieja siempre est� activado 12 bits
-				((RadioButton)findViewById(R.id.radioBttn12)).setChecked(false);
-				((RadioButton)findViewById(R.id.radioBttn8)).setChecked(true);
-			}
 			
 			// MODIFY VARIABLES FOR VALIDATION PURPOSES
 			activeChannels = oldConfiguration.getActiveSensors();
@@ -311,6 +303,7 @@ public class NewConfigurationActivity extends Activity {
 							// get active channels from adapter and sets it to the new configuration
 							activeChannels = activeChannelsListAdapter.getChecked();
 							newConfiguration.setActiveChannels(activeChannels);
+							newConfiguration.setDisplayChannels(activeChannels);
 						
 							if (noChannelsActivated(activeChannels)){
 								if(activeChannelsTV.getError() == null){
@@ -604,27 +597,6 @@ public class NewConfigurationActivity extends Activity {
 		finish();
 		overridePendingTransition(R.anim.slide_in_top, R.anim.slide_out_bottom);
 		displayInfoToast(getString(R.string.nc_info_canceled));
-	}
-
-	/**
-	 * Change the configuration' number of bits that can be 8 or 12
-	 * @param radioButtonView
-	 */
-	public void onRadioButtonClicked(View radioButtonView) {
-		boolean checked = ((RadioButton) radioButtonView).isChecked();
-
-		switch (radioButtonView.getId()) {
-		case R.id.radioBttn8:
-			if (checked){
-				newConfiguration.setNumberOfBits(8);
-			}
-			break;
-		case R.id.radioBttn12:
-			if (checked){
-				newConfiguration.setNumberOfBits(12);
-			}
-			break;
-		}
 	}
 
 	/**

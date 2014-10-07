@@ -2,7 +2,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ceu.marten.bitadroid"
-    android:versionCode="2"
+    android:versionCode="4"
     android:versionName="Beta" >
 
     <uses-sdk

@@ -30,46 +30,11 @@ public class BitalinoAndroidDevice{
 		super();
 		this.remoteDeviceMAC=remoteDeviceMAC;		
 	}
-
-	public int connect(int sampleRate) {
-		this.sampleRate=sampleRate;
-		final BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();	
-		BluetoothDevice dev = btAdapter.getRemoteDevice(remoteDeviceMAC);
-		btAdapter.cancelDiscovery();
-		BluetoothSocket sock;
-		try {
-			sock = dev.createRfcommSocketToServiceRecord(MY_UUID);
-			sock.connect();
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
-		}
-		
-		try {
-			bitalino = new BITalinoDevice(sampleRate, new int[] { 0, 1, 2,3,4, 5 });
-		} catch (BITalinoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -2;
-		}
-		try {
-			bitalino.open(sock.getInputStream(), sock.getOutputStream());
-		} catch (BITalinoException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-		return 0;
-	}
 	
 	public int start(){
         try {
 			bitalino.start();
 		} catch (BITalinoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return -1;
 		}
@@ -81,7 +46,6 @@ public class BitalinoAndroidDevice{
 		try {
 			frames = bitalino.read(numberOfSamplesToRead);
 		} catch (BITalinoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -92,10 +56,40 @@ public class BitalinoAndroidDevice{
 		try {
 			bitalino.stop();
 		} catch (BITalinoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return -1;
 		}
+		return 0;
+	}
+
+	public int connect(int sampleRate, int[] activeChannelsArray) {		
+		this.sampleRate=sampleRate;
+		final BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();	
+		BluetoothDevice dev = btAdapter.getRemoteDevice(remoteDeviceMAC);
+		btAdapter.cancelDiscovery();
+		BluetoothSocket sock;
+		try {
+			sock = dev.createRfcommSocketToServiceRecord(MY_UUID);
+			sock.connect();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return -1;
+		}
+		
+		try {
+			bitalino = new BITalinoDevice(sampleRate, activeChannelsArray);
+		} catch (BITalinoException e) {
+			e.printStackTrace();
+			return -2;
+		}
+		try {
+			bitalino.open(sock.getInputStream(), sock.getOutputStream());
+		} catch (BITalinoException | IOException e) {
+			e.printStackTrace();
+		}
+
+
 		return 0;
 	}
 	

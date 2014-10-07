@@ -100,7 +100,7 @@
     <string name="nc_frequency_reception_default">"100"</string>
     <string name="nc_frequency_metric">"Hz"</string>
     <string name="nc_frequency_sampling">"Sampling frequency"</string>
-    <string name="nc_frequency_sampling_default">"50"</string>
+    <string name="nc_frequency_sampling_default">"100"</string>
     <string name="nc_bits">Bits per signal</string>
     <string name="nc_bits_eight">8</string>
     <string name="nc_bits_twelve">12</string>
@@ -195,8 +195,6 @@
         <item >channel 4</item>
         <item >channel 5</item>
         <item >channel 6</item>
-        <item >channel 7</item>
-        <item >channel 8</item>
     </string-array>
     
      <!-- SENSORS LIST -->
