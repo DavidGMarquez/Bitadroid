@@ -347,18 +347,18 @@ public class BiopluxService extends Service {
 		//Bitalino always send 6 channels but only active which you selected
 		ArrayList<Integer> activeChannels = configuration.getActiveChannels();
 		int[] activeChannelsArray = convertToBitalinoChannelsArray(activeChannels);
-		int firstChannelUsed=activeChannelsArray[0];
-		
+				
 		short[] frameShort = new short[6];
 		
-		
-		for (int ind = 0; (ind+firstChannelUsed) < 6; ind++) {
-			frameShort[ind] = (short) (frame.getAnalog(firstChannelUsed+ind));
-		}
-		for(int indTemp=firstChannelUsed;indTemp>0;indTemp--){
-			frameShort[6-indTemp]=0;
+		for(int indTemp=0;indTemp<6;indTemp++){
+			frameShort[indTemp]=0;
 		}
 
+		for(int ind=0; ind<activeChannelsArray.length;ind++){
+			frameShort[ind]=(short) (frame.getAnalog(activeChannelsArray[ind]));
+		}
+		
+		
 		b.putShortArray(KEY_FRAME_DATA, frameShort);
 		Message message = Message.obtain(null, MSG_DATA);
 		message.setData(b);

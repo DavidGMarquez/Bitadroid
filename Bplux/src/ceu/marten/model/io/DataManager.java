@@ -10,7 +10,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -88,8 +90,14 @@ public class DataManager {
 		try {
 			sb.append(frameSeq).append("\t");
 			// WRITE THE DATA OF ACTIVE CHANNELS ONLY
-			for(int i=0; i< numberOfChannelsActivated;i++){
-				sb.append(frame.getAnalog(i)).append("\t");
+			
+			//Bitalino always send 6 channels but only active which you selected
+			ArrayList<Integer> activeChannels = configuration.getActiveChannels();
+			int[] activeChannelsArray = convertToBitalinoChannelsArray(activeChannels);
+			int firstChannelUsed=activeChannelsArray[0];
+			
+			for(int i=0; i< activeChannelsArray.length;i++){
+				sb.append(frame.getAnalog(activeChannelsArray[i])).append("\t");
 			}
 			// WRITE A NEW LINE
 			bufferedWriter.write(sb.append("\n").toString());
@@ -100,6 +108,20 @@ public class DataManager {
 			return false;
 		}
 		return true;
+	}
+	
+	private int[] convertToBitalinoChannelsArray(
+			ArrayList<Integer> activeChannels) {
+		int[] activeChannelsArray = new int[activeChannels.size()];
+		Iterator<Integer> iterator = activeChannels.iterator();
+		Log.e(TAG, "BITALINO ActiveChannels ");
+
+		for (int i = 0; i < activeChannelsArray.length; i++) {
+			activeChannelsArray[i] = iterator.next().intValue()-1;
+			Log.e(TAG, "BITALINO ActiveChannels C" + activeChannelsArray[i]);
+		}
+
+		return activeChannelsArray;
 	}
 	
 	/**
