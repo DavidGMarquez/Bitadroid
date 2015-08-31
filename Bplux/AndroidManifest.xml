@@ -2,13 +2,12 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ceu.marten.bitadroid"
-    android:versionCode="4"
-    android:versionName="Beta" >
+    android:versionCode="8"
+    android:versionName="Beta_v5" >
 
     <uses-sdk
-        android:maxSdkVersion="19"
         android:minSdkVersion="11"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
